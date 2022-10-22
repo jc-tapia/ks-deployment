@@ -34,6 +34,7 @@ jobs:
         export ARM_CLIENT_ID="${{secrets.SERVICEPRINCIPALID}}"
         export ARM_CLIENT_SECRET="${{secrets.SECRET}}"
         cd infrastructure
+        ls -la
     - name: Terraform Plan
       run: |
         terraform init
