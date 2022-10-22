@@ -13,6 +13,11 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install Azure CLI
       run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-    - uses: actions/checkout@v3
+    - shell: pwsh
+      env:
+        USER: ${{ secrets.SuperSecret }}
+        PASS: ${{ secrets.SuperSecret }}
+      run: |
+        az login -u "$USER" -p "$PASS" 
     - name: Build the Docker image
       run: docker build . --file docker/Dockerfile --tag flask-image:$(date +%s)
