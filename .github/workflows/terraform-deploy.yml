@@ -26,6 +26,6 @@ jobs:
         gpg --no-default-keyring \
           --keyring ./hashicorp-archive-keyring.gpg \
           --fingerprint
-        ./hashicorp-archive-keyring.gpg
+        sudo ./hashicorp-archive-keyring.gpg
         sudo apt update
         sudo apt-get install terraform
