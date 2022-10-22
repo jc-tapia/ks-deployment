@@ -1,5 +1,7 @@
 FROM python:3.7
 
+RUN pip install --upgrade pip
+
 RUN mkdir /app
 WORKDIR /app
 ADD . /app/
