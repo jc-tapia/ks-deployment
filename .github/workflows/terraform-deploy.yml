@@ -29,4 +29,3 @@ jobs:
         ./hashicorp-archive-keyring.gpg
         sudo apt update
         sudo apt-get install terraform
-        terraform -help
