@@ -15,10 +15,11 @@ jobs:
       run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
     - shell: pwsh
       env:
-        SP_CLIENT_ID: ${{ secrets.SP_CLIENT_ID }}
-        SP_SECRET: ${{ secrets.SP_SECRET }}
-        TENENT_ID: ${{ secrets.TENENT_ID }}
+        SP_CLIENT_ID: ${{ secrets.servicePrincipalId }}
+        SP_SECRET: ${{ secrets.secret }}
+        TENENT_ID: ${{ secrets.tenantId }}
       run: |
+        echo $TENENT_ID
         az login --service-principal -u "$SP_CLIENT_ID" -p "$SP_SECRET" --tenant "$TENENT_ID"
     - name: Build the Docker image
       run: docker build . --file docker/Dockerfile --tag flask-image:$(date +%s)
