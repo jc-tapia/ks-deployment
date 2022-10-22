@@ -26,6 +26,6 @@ jobs:
         unzip -o terraform_${TER_VER}_linux_amd64.zip
         ls -la 
         sudo mv terraform /usr/local/bin/
-        terraform
+        terraform -version
 
 
