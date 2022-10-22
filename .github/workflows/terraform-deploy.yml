@@ -25,7 +25,7 @@ jobs:
         gpg --no-default-keyring --keyring ./hashicorp-archive-keyring.gpg --fingerprint
         echo "deb [signed-by=./hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
         sudo apt update
-        sudo apt-get install terraform
+        sudo snap install terraform
         terraform -help
 
 
