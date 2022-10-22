@@ -37,6 +37,7 @@ jobs:
         ls -la
     - name: Terraform Plan
       run: |
+        ls -la
         terraform init
         terraform plan -out tfplan
         terraform show -json tfplan | jq > tfplan.json
