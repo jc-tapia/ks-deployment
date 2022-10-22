@@ -33,11 +33,9 @@ jobs:
         export ARM_TENANT_ID="${{secrets.TENANTID}}"
         export ARM_CLIENT_ID="${{secrets.SERVICEPRINCIPALID}}"
         export ARM_CLIENT_SECRET="${{secrets.SECRET}}"
-        cd infrastructure
-        ls -la
     - name: Terraform Plan
       run: |
-        ls -la
+        cd infrastructure
         terraform init
         terraform plan -out tfplan
         terraform show -json tfplan | jq > tfplan.json
