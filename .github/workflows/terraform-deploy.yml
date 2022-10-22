@@ -27,5 +27,16 @@ jobs:
         ls -la 
         sudo mv terraform /usr/local/bin/
         terraform -version
-
+    - name: Config ARM
+      run: |
+        export ARM_SUBSCRIPTION_ID="d076ebe8-8d8f-4687-8a42-87f9ac3225ac"
+        export ARM_TENANT_ID="${{secrets.TENANTID}}"
+        export ARM_CLIENT_ID="${{secrets.SERVICEPRINCIPALID}}"
+        export ARM_CLIENT_SECRET="${{secrets.SECRET}}"
+        cd infrastructure
+    - name: Terraform Plan
+      run: |
+        terraform init
+        terraform plan -out tfplan
+        terraform show -json tfplan | jq > tfplan.json
 

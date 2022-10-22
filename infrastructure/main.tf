@@ -5,16 +5,16 @@ terraform {
       version = "=2.46.0"
     }
   }
-    backend "azurerm" {
-        resource_group_name  = "tfresourcegroup"
-        storage_account_name = "tfstorageaccount"
-        container_name       = "tfcontainer"
-        key                  = "terraform.tfstate"
-    }
+  backend "azurerm" {
+    resource_group_name  = "tfresourcegroup"
+    storage_account_name = "tfstorageaccounteu2"
+    container_name       = "tfcontainer"
+    key                  = "terraform.tfstate"
+  }
 }
 resource "azurerm_resource_group" "rg" {
   name     = "resourceGroupAks"
-  location = "West Europe"
+  location = "East US 2"
 }
 resource "azurerm_container_registry" "acr" {
   name                = "containerRegistry"
