@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  main:
+  deploy-infra:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -31,4 +31,21 @@ jobs:
         terraform init
         terraform plan -out tfplan
         terraform show -json tfplan | jq > tfplan.json
+        cat tfplan.json | jq -r '(.resource_changes[] | [.change.actions[], .type, .change.after.name]) | @tsv'
+        cat tfplan.json | jq '[.resource_changes[] | {type: .type, name: .change.after.name, actions: .change.actions[]}]' 
+        terraform apply tfplan
+
+  push-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Azure CLI
+      run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    - name: Login Azure CLI
+      shell: pwsh
+      run: |
+        az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
+    - name: Build the Docker image
+      run: docker build . --file docker/Dockerfile --tag flask-image:$(date +%s)
+
 
