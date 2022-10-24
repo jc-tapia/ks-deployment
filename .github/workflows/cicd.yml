@@ -55,8 +55,7 @@ jobs:
         docker images
     - name: Push image to ACR
       run: |
-        az acr login --name myjccontainerregistry
-        docker login myjccontainerregistry.azurecr.io
+        docker login myjccontainerregistry.azurecr.io --username "${{secrets.SERVICEPRINCIPALID}}" --password "${{secrets.SECRET}}"
         docker push myregistry.azurecr.io/jcimg/flask-image:$ID
 
 
