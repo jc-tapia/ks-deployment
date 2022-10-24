@@ -73,6 +73,7 @@ jobs:
 
     - name: Get ACR credentials
       run: |
+        docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
         az acr update -n myjccontainerregistry -g myJcResourceGroupAks --admin-enabled true
         ACR_USERNAME=$(az acr credential show -g myJcResourceGroupAks  -n myjccontainerregistry --query username -o tsv)
         ACR_PASSWORD=$(az acr credential show -g myJcResourceGroupAks  -n myjccontainerregistry --query passwords[0].value -o tsv)
