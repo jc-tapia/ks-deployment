@@ -56,6 +56,6 @@ jobs:
       run: |
         az acr login -n myjccontainerregistry
         docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
-        docker push myregistry.azurecr.io/jcimg/flask-image
+        docker push myjccontainerregistry.azurecr.io/jcimg/flask-image
 
 
