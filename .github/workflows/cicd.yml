@@ -48,14 +48,14 @@ jobs:
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
     - name: Build the Docker image
       run: |
-        ID=$(date +%s)
-        docker build . --file docker/Dockerfile --tag flask-image:$ID
+        docker build . --file docker/Dockerfile --tag flask-image
     - name: View list images
       run: |
         docker images
     - name: Push image to ACR
       run: |
-        docker login myjccontainerregistry.azurecr.io --username "${{secrets.SERVICEPRINCIPALID}}" --password "${{secrets.SECRET}}"
-        docker push myregistry.azurecr.io/jcimg/flask-image:$ID
+        az acr login -n myjccontainerregistry
+        docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
+        docker push myregistry.azurecr.io/jcimg/flask-image
 
 
