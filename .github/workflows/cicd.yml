@@ -64,42 +64,21 @@ jobs:
     needs: push-image
     steps:
     - uses: actions/checkout@v3
+
     - name: Install Azure CLI
       run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
     - name: Login Azure CLI
       shell: pwsh
       run: |
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
-
-    - name: Get ACR credentials
-      run: |
-        docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
-        az acr update -n myjccontainerregistry -g myJcResourceGroupAks --admin-enabled true
-        ACR_USERNAME=$(az acr credential show -g myJcResourceGroupAks  -n myjccontainerregistry --query username -o tsv)
-        ACR_PASSWORD=$(az acr credential show -g myJcResourceGroupAks  -n myjccontainerregistry --query passwords[0].value -o tsv)
-        echo "::add-mask::${ACR_USERNAME}"
-        echo "::set-output name=username::${ACR_USERNAME}"
-        echo "::add-mask::${ACR_PASSWORD}"
-        echo "::set-output name=password::${ACR_PASSWORD}"
-      id: get-acr-creds
 
     - name: Set AKS context
       id: set-context
       uses: azure/aks-set-context@v3
       with:
         resource-group: 'myJcResourceGroupAks' 
-        cluster-name: 'MyJckubernetesCluster'
-
-    - name: Set imagePullSecret
-      uses: azure/k8s-create-secret@v4
-      with:
-        namespace: 'default'
-        secret-name: 'acr-secret-name'
-        container-registry-url: 'myjccontainerregistry.azurecr.io'
-        container-registry-username: ${{ steps.get-acr-creds.outputs.username }}
-        container-registry-password: ${{ steps.get-acr-creds.outputs.password }}
-      id: create-secret
-    
+        cluster-name: 'MyJckubernetesCluster'    
 
     - name: Setup kubectl
       id: install-kubectl
@@ -115,4 +94,3 @@ jobs:
             kubernetes/deployment.yaml
         images: 'myjccontainerregistry.azurecr.io/flask-image:latest'
         pull: true
-        imagepullsecrets: acr-secret-name
