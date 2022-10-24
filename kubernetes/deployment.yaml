@@ -4,7 +4,7 @@ metadata:
   name: flask-service
 spec:
   selector:
-    app: flask-image
+    app: flask-app
   ports:
   - protocol: "TCP"
     port: 6000
@@ -15,16 +15,16 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-image
+  name: flask-app
 spec:
   selector:
     matchLabels:
-      app: flask-image
-  replicas: 4
+      app: flask-app
+  replicas: 1
   template:
     metadata:
       labels:
-        app: flask-image
+        app: flask-app
     spec:
       containers:
       - name: flask-image
