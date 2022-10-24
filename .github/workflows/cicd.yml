@@ -48,5 +48,9 @@ jobs:
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
     - name: Build the Docker image
       run: docker build . --file docker/Dockerfile --tag flask-image:$(date +%s)
+    - name: View list images
+      run: |
+        docker images
+        docker ps
 
 
