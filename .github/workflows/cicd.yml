@@ -49,7 +49,7 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file docker/Dockerfile --tag flask-image
-        docker tag flask-image myjccontainerregistry.azurecr.io/jcimg/flask-image
+        docker tag flask-image myjccontainerregistry.azurecr.io/flask-image
     - name: View list images
       run: |
         docker images
