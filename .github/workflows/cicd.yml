@@ -21,7 +21,7 @@ jobs:
         ls -la 
         sudo mv terraform /usr/local/bin/
         terraform -version
-    - name: Terraform Plan
+    - name: Deploy with Terraform
       run: |
         export ARM_SUBSCRIPTION_ID="d076ebe8-8d8f-4687-8a42-87f9ac3225ac"
         export ARM_TENANT_ID="${{secrets.TENANTID}}"
