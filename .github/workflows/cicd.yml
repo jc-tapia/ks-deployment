@@ -72,6 +72,7 @@ jobs:
       shell: pwsh
       run: |
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
+        az acr list --resource-group myJcResourceGroupAks --query "[].{acrLoginServer:loginServer}" --output table
 
     - name: Set AKS context
       id: set-context
