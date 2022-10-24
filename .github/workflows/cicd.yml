@@ -82,6 +82,13 @@ jobs:
         echo "::set-output name=password::${ACR_PASSWORD}"
       id: get-acr-creds
 
+    - name: Set AKS context
+      id: set-context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: 'myJcResourceGroupAks' 
+        cluster-name: 'MyJckubernetesCluster'
+
     - name: Set imagePullSecret
       uses: azure/k8s-create-secret@v4
       with:
@@ -92,12 +99,7 @@ jobs:
         container-registry-password: ${{ steps.get-acr-creds.outputs.password }}
       id: create-secret
     
-    - name: Set AKS context
-      id: set-context
-      uses: azure/aks-set-context@v3
-      with:
-        resource-group: 'myJcResourceGroupAks' 
-        cluster-name: 'MyJckubernetesCluster'
+
     - name: Setup kubectl
       id: install-kubectl
       uses: azure/setup-kubectl@v3
