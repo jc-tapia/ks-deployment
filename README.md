@@ -69,7 +69,3 @@ Todo esto, orquestado desde github actions, en el job "deploy-aks" de [cicd.yml]
 - App en AKS
 
 ![ACR2](/docs/aks5.png)
-
-
-
-## Verificacion
