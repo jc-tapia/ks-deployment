@@ -58,5 +58,14 @@ jobs:
         az acr login -n myjccontainerregistry
         docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
         docker push myjccontainerregistry.azurecr.io/flask-image
+    - name: Deploy to Kubernetes
+      run: |
+        az aks install-cli
+        az aks get-credentials --resource-group myJcResourceGroupAks --name MyJckubernetesCluster
+        kubectl get nodes
+        kubectl apply -f docker/deployment.yaml
+
+
+        
 
 
