@@ -29,5 +29,6 @@ spec:
       containers:
       - name: flask-image
         image: myjccontainerregistry.azurecr.io/flask-image:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
