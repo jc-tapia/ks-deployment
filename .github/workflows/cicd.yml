@@ -48,7 +48,8 @@ jobs:
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
     - name: Build the Docker image
       run: |
-        docker build . --file docker/Dockerfile --tag myjccontainerregistry.azurecr.io/jcimg/flask-image
+        docker build . --file docker/Dockerfile --tag flask-image
+        docker tag flask-image myjccontainerregistry.azurecr.io/jcimg/flask-image
     - name: View list images
       run: |
         docker images
