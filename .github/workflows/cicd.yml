@@ -82,14 +82,16 @@ jobs:
         echo "::set-output name=password::${ACR_PASSWORD}"
       id: get-acr-creds
 
-    - name: Create K8s secret for pulling image from ACR
-      uses: Azure/k8s-create-secret@v1.1
+    - name: Set imagePullSecret
+      uses: azure/k8s-create-secret@v4
       with:
-        container-registry-url: myjccontainerregistry.azurecr.io
+        namespace: 'default'
+        secret-name: 'secretName'
+        container-registry-url: 'myjccontainerregistry.contoso.com'
         container-registry-username: ${{ steps.get-acr-creds.outputs.username }}
         container-registry-password: ${{ steps.get-acr-creds.outputs.password }}
-        secret-name: secretName 
-      
+      id: create-secret
+    
     - name: Set AKS context
       id: set-context
       uses: azure/aks-set-context@v3
