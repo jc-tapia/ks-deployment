@@ -63,7 +63,7 @@ jobs:
         az aks install-cli
         az aks get-credentials --resource-group myJcResourceGroupAks --name MyJckubernetesCluster
         kubectl get nodes
-        kubectl apply -f docker/deployment.yaml
+        kubectl apply -f kubernetes/deployment.yaml
 
 
         
