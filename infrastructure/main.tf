@@ -19,13 +19,13 @@ resource "azurerm_container_registry" "acr" {
   name                = "myJcContainerRegistry"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  sku                 = "Premium"
+  sku                 = "Basic"
 }
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = "MyJckubernetesCluster"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "dnsaks"
+  dns_prefix          = "dnsjc"
   default_node_pool {
     name       = "default"
     node_count = 1
