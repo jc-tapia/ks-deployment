@@ -87,4 +87,4 @@ jobs:
         manifests: |
             kubernetes/deployment.yaml
         images: 'myjccontainerregistry.azurecr.io/flask-image:latest'
-        pull: false
+        pull: true
