@@ -70,6 +70,19 @@ jobs:
       shell: pwsh
       run: |
         az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
+    - name: ACR build
+      id: build-push-acr
+      uses: azure/acr-build@v1
+      with:
+        service_principal: ${{secrets.SERVICEPRINCIPALID}}
+        service_principal_password: ${{secrets.SECRET}}
+        tenant: ${{secrets.TENANTID}}
+        registry: myjccontainerregistry.azurecr.io
+        repository: flask-image
+        image:  flask-image
+        folder: app
+        branch: main
+        tag: latest
     - name: Set AKS context
       id: set-context
       uses: azure/aks-set-context@v3
