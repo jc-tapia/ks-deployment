@@ -35,63 +35,63 @@ jobs:
         cat tfplan.json | jq '[.resource_changes[] | {type: .type, name: .change.after.name, actions: .change.actions[]}]' 
         terraform apply tfplan
 
-  push-image:
-    runs-on: ubuntu-latest
-    needs: deploy-infra
-    steps:
-    - uses: actions/checkout@v3
-    - name: Install Azure CLI
-      run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-    - name: Login Azure CLI
-      shell: pwsh
-      run: |
-        az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
-    - name: Build the Docker image
-      run: |
-        docker build . --file app/Dockerfile --tag flask-image
-        docker tag flask-image myjccontainerregistry.azurecr.io/flask-image
-    - name: View list images
-      run: |
-        docker images
-    - name: Push image to ACR
-      run: |
-        az acr login -n myjccontainerregistry
-        docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
-        docker push myjccontainerregistry.azurecr.io/flask-image
+  # push-image:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-infra
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Install Azure CLI
+  #     run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  #   - name: Login Azure CLI
+  #     shell: pwsh
+  #     run: |
+  #       az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
+  #   - name: Build the Docker image
+  #     run: |
+  #       docker build . --file app/Dockerfile --tag flask-image
+  #       docker tag flask-image myjccontainerregistry.azurecr.io/flask-image
+  #   - name: View list images
+  #     run: |
+  #       docker images
+  #   - name: Push image to ACR
+  #     run: |
+  #       az acr login -n myjccontainerregistry
+  #       docker login myjccontainerregistry.azurecr.io -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}"
+  #       docker push myjccontainerregistry.azurecr.io/flask-image
 
-  deploy-aks:
-    runs-on: ubuntu-latest
-    needs: push-image
-    steps:
-    - uses: actions/checkout@v3
+  # deploy-aks:
+  #   runs-on: ubuntu-latest
+  #   needs: push-image
+  #   steps:
+  #   - uses: actions/checkout@v3
 
-    - name: Install Azure CLI
-      run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  #   - name: Install Azure CLI
+  #     run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-    - name: Login Azure CLI
-      shell: pwsh
-      run: |
-        az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
-        az acr list --resource-group myJcResourceGroupAks --query "[].{acrLoginServer:loginServer}" --output table
+  #   - name: Login Azure CLI
+  #     shell: pwsh
+  #     run: |
+  #       az login --service-principal -u "${{secrets.SERVICEPRINCIPALID}}" -p "${{secrets.SECRET}}" --tenant "${{secrets.TENANTID}}"
+  #       az acr list --resource-group myJcResourceGroupAks --query "[].{acrLoginServer:loginServer}" --output table
 
-    - name: Set AKS context
-      id: set-context
-      uses: azure/aks-set-context@v3
-      with:
-        resource-group: 'myJcResourceGroupAks' 
-        cluster-name: 'MyJckubernetesCluster'    
+  #   - name: Set AKS context
+  #     id: set-context
+  #     uses: azure/aks-set-context@v3
+  #     with:
+  #       resource-group: 'myJcResourceGroupAks' 
+  #       cluster-name: 'MyJckubernetesCluster'    
 
-    - name: Setup kubectl
-      id: install-kubectl
-      uses: azure/setup-kubectl@v3
+  #   - name: Setup kubectl
+  #     id: install-kubectl
+  #     uses: azure/setup-kubectl@v3
 
-    - name: Deploy to AKS
-      id: deploy-aks
-      uses: Azure/k8s-deploy@v4
-      with:
-        namespace: 'default'
-        action: deploy
-        manifests: |
-            kubernetes/deployment.yaml
-        images: 'myjccontainerregistry.azurecr.io/flask-image:latest'
-        pull: true
+  #   - name: Deploy to AKS
+  #     id: deploy-aks
+  #     uses: Azure/k8s-deploy@v4
+  #     with:
+  #       namespace: 'default'
+  #       action: deploy
+  #       manifests: |
+  #           kubernetes/deployment.yaml
+  #       images: 'myjccontainerregistry.azurecr.io/flask-image:latest'
+  #       pull: true
