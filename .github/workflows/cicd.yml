@@ -119,4 +119,4 @@ jobs:
         export ARM_CLIENT_SECRET="${{secrets.SECRET}}"
         cd infrastructure
         terraform init
-        terraform destroy
+        terraform destroy -force
